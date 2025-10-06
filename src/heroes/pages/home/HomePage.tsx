@@ -1,14 +1,25 @@
 import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CustomJumbotron } from "@/components/custom/CustomJumbotron"
 import { HeroStats } from "@/heroes/components/HeroStats"
 import { HeroGrid } from "@/heroes/components/HeroGrid"
 import { CustomPagination } from "@/components/custom/CustomPagination"
-import { CustomBreadcrumb } from "@/components/custom/CustomBreadcrumb"
+import { CustomBreadcrumbs } from "@/components/custom/CustomBreadcrumb"
+import { getHeroesByPageAction } from "@/heroes/actions/heroes-by-page.action"
 
 
 export const  HomePage=()=> {
   const [activeTab, setActiveTab] = useState<'all' |'favorites'|'heroes'|'villains'>('all')
+  const {data}=useQuery({
+    queryKey:['heroes'],
+    queryFn:getHeroesByPageAction,
+    staleTime:1000*60*5 //5 minutos
+  })
+  console.log({data})
+  // useEffect(()=>{
+  //   getHeroesByPage().then()
+  // },[])
   return (
     <>
       <>
@@ -18,7 +29,7 @@ export const  HomePage=()=> {
           description="Descubre, explora y administra super Héroes y Villanos" 
         
         />
-        <CustomBreadcrumb currentPage="Super Heroes"/>
+        <CustomBreadcrumbs currentPage="Super Heroes"/>
 
         {/* Stats Dashboard */}
         <HeroStats/>
