@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { useSearchParams } from "react-router"
 import { useQuery } from "@tanstack/react-query"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CustomJumbotron } from "@/components/custom/CustomJumbotron"
@@ -7,19 +8,28 @@ import { HeroGrid } from "@/heroes/components/HeroGrid"
 import { CustomPagination } from "@/components/custom/CustomPagination"
 import { CustomBreadcrumbs } from "@/components/custom/CustomBreadcrumb"
 import { getHeroesByPageAction } from "@/heroes/actions/heroes-by-page.action"
+import { Activity } from "lucide-react"
 
 
 export const  HomePage=()=> {
-  const [activeTab, setActiveTab] = useState<'all' |'favorites'|'heroes'|'villains'>('all')
+
+  const [searchParams,setSearchParams]=useSearchParams("")
+  
+  const activeTab=searchParams.get('tab') ?? 'all'
+  const selectedTab=useMemo(()=>{
+      const validTabs=['all' ,'favorites','heroes','villains']
+      return validTabs.includes(activeTab) ? activeTab :'all'
+  },[activeTab])
+
+ 
+
+  
   const {data:heroesResponse}=useQuery({
     queryKey:['heroes'],
     queryFn:getHeroesByPageAction,
     staleTime:1000*60*5 //5 minutos
   })
-  console.log({heroesResponse})
-  // useEffect(()=>{
-  //   getHeroesByPage().then()
-  // },[])
+ 
   return (
     <>
       <>
@@ -36,14 +46,44 @@ export const  HomePage=()=> {
         
 
         {/* Tabs */}
-        <Tabs value={activeTab} className="mb-8">
+        <Tabs value={selectedTab} className="mb-8">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all" onClick={()=>setActiveTab('all')}>All Characters (16)</TabsTrigger>
-            <TabsTrigger value="favorites" className="flex items-center gap-2" onClick={()=>setActiveTab('favorites')}>
+            <TabsTrigger value="all" onClick={()=>
+                setSearchParams((prev)=>{
+                prev.set('tab','all')
+                return prev
+               })
+            }
+            >
+              All Characters (16)</TabsTrigger>
+            <TabsTrigger value="all" onClick={()=>
+                setSearchParams((prev)=>{
+                prev.set('tab','favorites')
+                return prev
+               })
+            }
+            >
               Favorites (3)
             </TabsTrigger>
-            <TabsTrigger value="heroes" onClick={()=>setActiveTab('heroes')}>Heroes (12)</TabsTrigger>
-            <TabsTrigger value="villains" onClick={()=>setActiveTab('villains')}>Villains (2)</TabsTrigger>
+            <TabsTrigger value="all" onClick={()=>
+                setSearchParams((prev)=>{
+                prev.set('tab','heroes')
+                return prev
+               })
+            }
+            
+            >
+              Heroes (12)
+            </TabsTrigger>
+            <TabsTrigger value="all" onClick={()=>
+                setSearchParams((prev)=>{
+                prev.set('tab','villains')
+                return prev
+              })
+            }
+            >
+              Villains (2)
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="all">
             {/* Mostrar todos los personajes */}
