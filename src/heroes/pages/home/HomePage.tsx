@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { useSearchParams } from "react-router"
 import { useQuery } from "@tanstack/react-query"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -8,7 +8,6 @@ import { HeroGrid } from "@/heroes/components/HeroGrid"
 import { CustomPagination } from "@/components/custom/CustomPagination"
 import { CustomBreadcrumbs } from "@/components/custom/CustomBreadcrumb"
 import { getHeroesByPageAction } from "@/heroes/actions/heroes-by-page.action"
-import { Activity } from "lucide-react"
 
 
 export const  HomePage=()=> {
@@ -16,6 +15,9 @@ export const  HomePage=()=> {
   const [searchParams,setSearchParams]=useSearchParams("")
   
   const activeTab=searchParams.get('tab') ?? 'all'
+  const page=searchParams.get('page') ?? '1'
+  const limit=searchParams.get('limit') ?? '6'
+
   const selectedTab=useMemo(()=>{
       const validTabs=['all' ,'favorites','heroes','villains']
       return validTabs.includes(activeTab) ? activeTab :'all'
@@ -26,7 +28,7 @@ export const  HomePage=()=> {
   
   const {data:heroesResponse}=useQuery({
     queryKey:['heroes'],
-    queryFn:getHeroesByPageAction,
+    queryFn:()=>getHeroesByPageAction(+page,+limit),
     staleTime:1000*60*5 //5 minutos
   })
  

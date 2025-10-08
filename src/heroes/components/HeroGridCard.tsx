@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router"
-import { Heart, Eye, Zap, Brain, Gauge, Shield, AlignJustifyIcon } from "lucide-react"
+import { Heart, Eye, Zap, Brain, Gauge, Shield } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import  { Button } from "@/components/ui/button"
-import  { Card, CardHeader, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import type { Hero } from "../types/hero.interface"
 
