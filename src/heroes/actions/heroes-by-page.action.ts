@@ -10,6 +10,7 @@ export const getHeroesByPageAction=async (
     if (isNaN(page)){
         page=1
     }
+    
     if (isNaN(limit)){
         limit=6
     }
