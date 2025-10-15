@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { Navigate, useParams } from "react-router"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -7,28 +7,15 @@ import { Shield, Zap, Brain, Gauge, Users, Star, Award } from "lucide-react"
 import { useSuperHero } from "@/heroes/hooks/useSuperHero"
 
 
-// const superheroData = {
-//       id: "1",
-//       name: "Clark Kent",
-//       alias: "Superman",
-//       powers: ["Súper fuerza", "Vuelo", "Visión de calor", "Visión de rayos X", "Invulnerabilidad", "Súper velocidad"],
-//       description: "El Último Hijo de Krypton, protector de la Tierra y símbolo de esperanza para toda la humanidad.",
-//       strength: 10,
-//       intelligence: 8,
-//       speed: 9,
-//       durability: 10,
-//       team: "Liga de la Justicia",
-//       image: "/placeholder.svg?height=300&width=300",
-//       firstAppearance: "1938",
-//       status: "Activo",
-//       category: "Héroe",
-//       universe: "DC",
-//   }
 export const HeroPage = () => {
   const {idSlug=''}=useParams()
   
   console.log({idSlug})
-  const {data:superheroData}=useSuperHero(idSlug)
+  const {data:superheroData,isError}=useSuperHero(idSlug)
+
+  if (isError){
+    return <Navigate to='/' />
+  }
 
   if (!superheroData) {
     return <div className="p-8 text-center text-gray-500">Espere ...</div>
